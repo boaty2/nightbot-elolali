@@ -58,6 +58,6 @@ export default async function handler(req, res) {
     );
 
   } catch (err) {
-    return res.status(200).send("Error obteniendo elo.");
+    return res.status(200).send("ERROR: " + err.message)
   }
 }
