@@ -40,7 +40,9 @@ export default async function handler(req, res) {
     );
 
     const ranked = await rankedReq.json();
-
+    
+    return res.status(200).json(ranked);
+    
     const solo = ranked.find(
       q => q.queueType === "RANKED_SOLO_5x5"
     );
