@@ -1,8 +1,8 @@
 export default async function handler(req, res) {
   const API_KEY = process.env.RIOT_KEY;
 
-  const GAME_NAME = "TU_NOMBRE";
-  const TAG_LINE = "LAS";
+  const GAME_NAME = "lalitamugiwara";
+  const TAG_LINE = "lali";
 
   try {
     // Obtener PUUID
