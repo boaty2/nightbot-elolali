@@ -5,7 +5,6 @@ export default async function handler(req, res) {
   const TAG_LINE = "lali";
 
   try {
-    // Obtener PUUID
     const accountReq = await fetch(
       `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${GAME_NAME}/${TAG_LINE}`,
       {
@@ -17,7 +16,13 @@ export default async function handler(req, res) {
 
     const account = await accountReq.json();
 
-    // Obtener summoner
+    if (!account.puuid) {
+      return res.status(200).json({
+        paso: "account",
+        respuesta: account
+      });
+    }
+
     const summonerReq = await fetch(
       `https://la2.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${account.puuid}`,
       {
@@ -29,7 +34,13 @@ export default async function handler(req, res) {
 
     const summoner = await summonerReq.json();
 
-    // Obtener ranked
+    if (!summoner.id) {
+      return res.status(200).json({
+        paso: "summoner",
+        respuesta: summoner
+      });
+    }
+
     const rankedReq = await fetch(
       `https://la2.api.riotgames.com/lol/league/v4/entries/by-summoner/${summoner.id}`,
       {
@@ -40,26 +51,15 @@ export default async function handler(req, res) {
     );
 
     const ranked = await rankedReq.json();
-    
-    return res.status(200).json(ranked);
-    
-    const solo = ranked.find(
-      q => q.queueType === "RANKED_SOLO_5x5"
-    );
 
-    if (!solo) {
-      return res.status(200).send("No tiene rango en SoloQ.");
-    }
-
-    const wr =
-      ((solo.wins / (solo.wins + solo.losses)) * 100)
-      .toFixed(1);
-
-    return res.status(200).send(
-      `🏆 ${solo.tier} ${solo.rank} ${solo.leaguePoints} LP | 📈 ${wr}% WR`
-    );
+    return res.status(200).json({
+      paso: "ranked",
+      respuesta: ranked
+    });
 
   } catch (err) {
-    return res.status(200).send("ERROR: " + err.message)
+    return res.status(200).json({
+      error: err.message
+    });
   }
 }
