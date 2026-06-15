@@ -1,6 +1,9 @@
 export default async function handler(req, res) {
   const API_KEY = process.env.RIOT_KEY;
 
+  return res.status(200).send(API_KEY || "NO_API_KEY");
+}
+
   const GAME_NAME = "lalitamugiwara";
   const TAG_LINE = "lali";
 
